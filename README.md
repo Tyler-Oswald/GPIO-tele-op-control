@@ -20,7 +20,7 @@ The gamepad (Logitech F710) commands for controlling the DeepRacer are as follow
 * **'Left Joystick'**: turn left/right
 * **'Right Joystick'**: accelerate / reverse
 * **'Dpad'**: discrete left/right/forward. down button toggles stop/reverse
-* **'Red 'B''**: toggle recording
+* **'Blue 'X''**: stop the car and switch to manual mode
 * **'Red 'B''**: toggle recording
 * **'Green 'A''**: press once to connect
 * **'Start button'**: toggle autonomous driving
