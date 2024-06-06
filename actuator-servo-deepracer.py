@@ -105,7 +105,7 @@ def set_throttle(throttle_pct):
     # Ensure throttle_pwm is within the acceptable range
     p = max(-100, min(100, throttle_pct))
     pwm = get_pwm(p, thr_lims, polarities)
-    print(f"throttle_pct: {throttle_pct} throttle_pwm: {pwm}")
+    #print(f"throttle_pct: {throttle_pct} throttle_pwm: {pwm}")
 
     try:
         write_to_file(PWM_DIR + '/pwm0/duty_cycle', str(pwm))
@@ -132,7 +132,7 @@ def set_steering(steering_deg):
     p = max(-30, min(30, steering_deg))
     p = p / 30 * 100
     pwm = get_spwm(p, srv_lims, polarities)
-    print(f"steering_deg: {steering_deg} steering_pwm: {pwm}")
+    #print(f"steering_deg: {steering_deg} steering_pwm: {pwm}")
 
     try:
         write_to_file(PWM_DIR + '/pwm1/duty_cycle', str(pwm))
@@ -153,16 +153,18 @@ def disable():
     write_to_file(PWM_DIR + '/pwm0/enable', "0")
     write_to_file(PWM_DIR + '/pwm1/enable', "0")
 
-def drive_calib(init_pwm):
+def drive_calib(init_pwm, plrty=1):
     import params
     inputdev = __import__(params.inputdev)
     pwm = init_pwm
     while True:
         ch = inputdev.read_single_event()
         if ch == ord('a'): # increase
-            pwm += 2000
+            pwm += 2000 * plrty
         elif ch == ord('z'): # decrease
-            pwm -= 2000
+            pwm -= 2000 * plrty
+        elif ch == ord('s'): # switch polarity
+            plrty *= -1
         elif ch == ord('q'):
             break
 
@@ -171,57 +173,97 @@ def drive_calib(init_pwm):
         except OSError as e:
             print(f"Failed to set throttle: {e}")
 
-    return pwm
+    return pwm, plrty
 
-def steer_calib(init_pwm):
+def steer_calib(init_pwm, plrty=1):
     import params
     inputdev = __import__(params.inputdev)
     pwm = init_pwm
     while True:
             ch = inputdev.read_single_event()
             if ch == ord('a'): # increase
-                pwm += 5000
+                pwm += 5000 * plrty
             elif ch == ord('z'): # decrease
-                pwm -= 5000
+                pwm -= 5000 * plrty
+            elif ch == ord('s'): # switch polarity
+                plrty *= -1
             elif ch == ord('q'):
                 break
-
             try:
                 write_to_file(PWM_DIR + '/pwm1/duty_cycle', str(pwm))
             except OSError as e:
                 print(f"Failed to set steering: {e}")
-    return pwm
+    return pwm, plrty 
 
 
 if __name__ == "__main__":
-    print('Calibrating throttle now.')
     calib_mode = True
     init()
-    print('\n\nSet the max forward')
-    pwm1 = drive_calib(thr_lims[1])
-    print('\n\nSet the min forward. Decrease the speed from max' \
-            ' gradually until it stops. Then increase it until' \
-            ' it starts moving again.')
-    pwm2 = drive_calib(pwm1)
-    print('\n\nSet the max backward')
-    pwm3 = drive_calib(pwm2)
-    print('\n\nSet the min backward. Decrease the speed from max' \
-            ' gradually until it stops. Then increase it until' \
-            ' it starts moving again.')
-    pwm4 = drive_calib(pwm3)
+    print('*****************************************')
+    print('Calibrating max forward throttle now.')
+    print('Use A to increase the forward throttle.')
+    print('Use Z to increase the backward throttle.')
+    print('If the opposite is happening, press S to switch polarity.')
+    print('Now adjust the throttle until desired maximum forward is reached.')
+    print('Use Q button when done.')
+    pwm1, p = drive_calib(thr_lims[1])
+    print('\n\n*****************************************')
+    print('Calibrating min forward throttle now.')
+    print('Use A to increase the forward throttle.')
+    print('Use Z to increase the backward throttle.')
+    print('Now decrease the throttle until it stops spinning.')
+    print('Then slowly increase the throttle until it starts spinning forward')
+    print('Use Q button when done.')
+    pwm2, p = drive_calib(pwm1, p)
+    print('\n\n*****************************************')
+    print('Calibrating max backward throttle now.')
+    print('Use A to increase the forward throttle.')
+    print('Use Z to increase the backward throttle.')
+    print('Now adjust the throttle until desired maximum backward is reached.')
+    print('Use Q button when done.')
+    pwm3, p = drive_calib(pwm2, p)
+    print('\n\n*****************************************')
+    print('Calibrating min backward throttle now.')
+    print('Use A to increase the forward throttle.')
+    print('Use Z to increase the backward throttle.')
+    print('Now decrease the throttle until it stops spinning.')
+    print('Then slowly increase the throttle until it starts spinning backward')
+    print('Use Q button when done.')
+    pwm4, p = drive_calib(pwm3, p)
     disable()
 
     #Begin steering calibration
-    print('Calibrating steering now\n')
-    print('\n\nSet max left angle by pressing "a" to increase and "z" to decrease. "q" to quit\n')
-    spwm1 = steer_calib(srv_lims[1])
-    print('\n\nSet the min left angle (decrease until straight) by pressing "a" to increase and "z" to decrease. "q" to quit\n')
-    spwm2 = steer_calib(spwm1)
-    print('\n\nSet max right angle by pressing "a" to increase and "z" to decrease. "q" to quit\n')
-    spwm3 = steer_calib(spwm2)
-    print('\n\nSet the min right angle (decrease until straight) by pressing "a" to increase and "z" to decrease. "q" to quit\n')
-    spwm4 = steer_calib(spwm3)
-    disable()
+    print('\n\n*****************************************')
+    print('Calibrating max left steering angle now.')
+    print('Use A to increase the left turn angle.')
+    print('Use Z to increase the right turn angle.')
+    print('If the opposite is happening, press S to switch polarity.')
+    print('Adjust the turning angle until the maximum left point is reached,')
+    print('where increasing the angle doesnt change anything.')
+    print('Use Q button when done.')
+    spwm1, p = steer_calib(srv_lims[1])
+    print('\n\n*****************************************')
+    print('Calibrating min left steering angle now.')
+    print('Use A to increase the left turn angle.')
+    print('Use Z to increase the right turn angle.')
+    print('Decrease the left turning angle until the tires on the right side are aligned.')
+    print('Use Q button when done.')
+    spwm2, p = steer_calib(spwm1, p)
+    print('\n\n*****************************************')
+    print('Calibrating max right steering angle now.')
+    print('Use A to increase the left turn angle.')
+    print('Use Z to increase the right turn angle.')
+    print('Adjust the turning angle until the maximum right point is reached,')
+    print('where increasing the angle doesnt change anything.')
+    print('Use Q button when done.')
+    spwm3, p = steer_calib(spwm2, p)
+    print('\n\n*****************************************')
+    print('Calibrating min right steering angle now.')
+    print('Use A to increase the left turn angle.')
+    print('Use Z to increase the right turn angle.')
+    print('Decrease the left turning angle until the tires on the left side are aligned.')
+    print('Use Q button when done.')
+    spwm4, p = steer_calib(spwm3, p)
 
     polarities[0] = -1 if pwm1 < pwm3 else 1
     if polarities[0] == -1:
@@ -234,7 +276,6 @@ if __name__ == "__main__":
         srv_lims = [spwm1, spwm2, spwm4, spwm3]
     else:
         srv_lims = [spwm3, spwm4, spwm2, spwm1]
-    disable()
 
     print(thr_lims)
     print(srv_lims)
@@ -246,3 +287,5 @@ if __name__ == "__main__":
         calib['steering_limits'] = srv_lims
         calib['polarity'] = polarities
         json.dump(calib, f)
+
+    #disable()

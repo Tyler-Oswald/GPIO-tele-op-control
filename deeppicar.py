@@ -27,12 +27,12 @@ view_video = False
 fpv_video = False
 enable_record = False
 cfg_cam_res = (160, 120)
-cfg_cam_fps = 30
+cfg_cam_fps = 15
 
 frame_id = 0
-max_frames = 2000
+max_frames = 60 * cfg_cam_fps  # 950
 angle = 0.0
-period = 0.05 # sec (=50ms)
+period = 1.0 / cfg_cam_fps # sec (=66ms)
 
 ##########################################################
 # local functions
@@ -124,21 +124,17 @@ def measure_execution_time(func, num_trials):
 
 parser = argparse.ArgumentParser(description='DeepPicar main')
 parser.add_argument("-d", "--dnn", help="Enable DNN", action="store_true")
-parser.add_argument("-t", "--throttle", help="throttle percent. [0-100]%", type=int, default=100)
-parser.add_argument("--turnthresh", help="throttle percent. [0-30]degree", type=int, default=10)
+parser.add_argument("-t", "--throttle", help="throttle percent. [0-100]%", type=int, default=50)
 parser.add_argument("-n", "--ncpu", help="number of cores to use.", type=int, default=2)
 parser.add_argument("-f", "--hz", help="control frequnecy", type=int)
 parser.add_argument("--fpvvideo", help="Take FPV video of DNN driving", action="store_true")
-parser.add_argument("--use", help="use [tflite|tf|openvino]", type=str, default="tflite")
+parser.add_argument("--use", help="use [tflite|tf|openvino]", type=str, default="openvino")
 parser.add_argument("--pre", help="preprocessing [resize|crop]", type=str, default="resize")
 parser.add_argument("-g", "--gamepad", help="Use gamepad", action="store_true")
 args = parser.parse_args()
 
 if args.throttle:
     print ("throttle = %d pct" % (args.throttle))
-if args.turnthresh:
-    args.turnthresh = args.turnthresh
-    print ("turn angle threshold = %d degree\n" % (args.turnthresh))
 if args.hz:
     period = 1.0/args.hz
     print("new period: ", period)
@@ -155,6 +151,10 @@ else:
     cur_inp_type= input_stream.input_type.KEYBOARD
 
 cur_inp_stream= input_stream.instantiate_inp_stream(cur_inp_type, args.throttle)
+
+if not os.path.exists("dataset"):
+    # Create the directory
+    os.makedirs("dataset")
 
 ##########################################################
 # import deeppicar's DNN model
@@ -231,7 +231,7 @@ while True:
         enable_record = False # stop recording as well 
         args.dnn = False # manual mode
     elif command == 'z':
-        print ("TODO reverse")
+        print ("reverse")
     elif command == 'r':
         enable_record = not enable_record
         print ("record mode: ", enable_record)
@@ -253,7 +253,6 @@ while True:
             angle = model.predict(img)[0]
         elif args.use == "openvino":
             angle = model(img)[0][0][0]
-            # print ('angle:', angle);
         else: # tflite
             interpreter.set_tensor(input_index, img)
             interpreter.invoke()
@@ -272,7 +271,7 @@ while True:
                 % (ts - start_ts, int(dur * 1000)))
     # else:
     #     print("%.3f: took %d ms" % (ts - start_ts, int(dur * 1000)))
-    
+
     if enable_record == True and frame_id == 0:
         # create files for data recording
         keyfile = open(params.rec_csv_file, 'w+')
@@ -307,7 +306,7 @@ while True:
         #img_name = "cal_images/opencv_frame_{}.png".format(frame_id)
         #cv2.imwrite(img_name, frame)
         if frame_id >= max_frames:
-            print ("recorded 2000 frames")
+            print (f"recorded {max_frames} frames")
             break
         print ("%.3f %d %.3f %d(ms)" %
            (ts, frame_id, angle, int((time.time() - ts)*1000)))
