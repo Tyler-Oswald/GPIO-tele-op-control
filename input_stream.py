@@ -134,6 +134,7 @@ class input_gamepad(input_stream):
                         shr_gamepad_state[0]= 0.
                 elif event.ev_type == 'Key' and event.code == 'BTN_NORTH' and int(event.state) == 1:
                     shr_gamepad_state[3]=1. # stop
+                    shr_gamepad_state[8]=0. # no throttle
                 elif event.ev_type == 'Key' and event.code == 'BTN_EAST' and int(event.state) == 1:
                     shr_gamepad_state[4]=1. # record
                 elif event.ev_type == 'Key' and event.code == 'BTN_START' and int(event.state) == 1:
@@ -187,7 +188,6 @@ class input_gamepad(input_stream):
             self.shared_arr[7] = 0.
             self.buffer='t'
             #print ("toggle video mode")
-
 
         self.direction = self.shared_arr[0]
         self.speed = self.shared_arr[8] 

@@ -139,19 +139,11 @@ def set_steering(steering_deg):
     except OSError as e:
         print(f"Failed to set steering: {e}")
 
-def ffw():
-    write_to_file(PWM_DIR + '/pwm0/enable', "1")
-    write_to_file(PWM_DIR + '/pwm1/enable', "1")
+def ffw(throttle):
+    set_throttle(throttle)
 
 def stop():
-    global thr_lims
-    write_to_file(PWM_DIR + '/pwm0/duty_cycle', str(thr_lims[1]))
-    write_to_file(PWM_DIR + '/pwm1/duty_cycle', str(srv_lims[1]))
-
-def disable():
-    stop()
-    write_to_file(PWM_DIR + '/pwm0/enable', "0")
-    write_to_file(PWM_DIR + '/pwm1/enable', "0")
+    set_throttle(0)
 
 def drive_calib(init_pwm, plrty=1):
     import params
@@ -230,7 +222,7 @@ if __name__ == "__main__":
     print('Then slowly increase the throttle until it starts spinning backward')
     print('Use Q button when done.')
     pwm4, p = drive_calib(pwm3, p)
-    disable()
+    stop()
 
     #Begin steering calibration
     print('\n\n*****************************************')
@@ -287,5 +279,3 @@ if __name__ == "__main__":
         calib['steering_limits'] = srv_lims
         calib['polarity'] = polarities
         json.dump(calib, f)
-
-    #disable()

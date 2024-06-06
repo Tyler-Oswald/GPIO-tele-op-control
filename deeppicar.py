@@ -50,7 +50,7 @@ def g_tick():
         yield max(t + count*period - time.time(),0)
 
 def turn_off():
-    actuator.disable()
+    actuator.stop()
     camera.stop()
     if frame_id > 0:
         keyfile.close()
@@ -221,11 +221,11 @@ while True:
         command, direction, speed = cur_inp_stream.read_inp()
 
     if command == 'a':
-        actuator.ffw()
+        actuator.ffw(args.throttle)
         start_ts = ts
         print ("accel")
     elif command == 's':
-        actuator.disable()
+        actuator.stop()
         print ("stop")
         print ("duration: %.2f" % (ts - start_ts))
         enable_record = False # stop recording as well 
@@ -236,13 +236,13 @@ while True:
         enable_record = not enable_record
         print ("record mode: ", enable_record)
     elif command == 't':
-        print ("toggle video mode")
-        view_video = not view_video
+        print ("toggle video mode is NOT SUPPORTED")
+        #view_video = not view_video
     elif command == 'd':
         print ("toggle DNN mode")
         args.dnn = not args.dnn
     elif command == 'q':
-        actuator.disable()
+        actuator.stop()
         break
 
     if args.dnn == True:
