@@ -222,6 +222,14 @@ if __name__ == "__main__":
     print('Then slowly increase the throttle until it starts spinning backward')
     print('Use Q button when done.')
     pwm4, p = drive_calib(pwm3, p)
+
+
+    polarities[0] = -1 if pwm1 < pwm3 else 1
+    if polarities[0] == -1:
+        thr_lims = [pwm1, pwm2, pwm4, pwm3]
+    else:
+        thr_lims = [pwm3, pwm4, pwm2, pwm1]
+
     stop()
 
     #Begin steering calibration
@@ -257,21 +265,11 @@ if __name__ == "__main__":
     print('Use Q button when done.')
     spwm4, p = steer_calib(spwm3, p)
 
-    polarities[0] = -1 if pwm1 < pwm3 else 1
-    if polarities[0] == -1:
-        thr_lims = [pwm1, pwm2, pwm4, pwm3]
-    else:
-        thr_lims = [pwm3, pwm4, pwm2, pwm1]
-
     polarities[1] = -1 if spwm1 < spwm3 else 1
     if polarities[1] == -1:
         srv_lims = [spwm1, spwm2, spwm4, spwm3]
     else:
         srv_lims = [spwm3, spwm4, spwm2, spwm1]
-
-    print(thr_lims)
-    print(srv_lims)
-    print(polarities)
 
     with open(PWM_CALIB_FILE, 'w') as f:
         calib = {}
@@ -279,3 +277,7 @@ if __name__ == "__main__":
         calib['steering_limits'] = srv_lims
         calib['polarity'] = polarities
         json.dump(calib, f)
+
+    print(thr_lims)
+    print(srv_lims)
+    print(polarities)
