@@ -12,6 +12,13 @@ DAVE-2 and can drive an AWS DeepRacer in real-time without needing GPU.
     $ cd DeepPicar-DeepRacer
     $ sudo pip3 install -r requirements.txt
 
+## Calibrate
+Put the car in a position where the tires do not touch the floor and run the calibration:
+
+    $ sudo python3 actuator-servo-deepracer.py
+    
+This will overwrite the pwm_calibration.json file with the new values you calibrated.
+
 ## Manual control and Data collection
 
     $ sudo python3 deeppicar.py -g
@@ -40,28 +47,28 @@ The keyboard can be used instead of a gamepad by omitting the -g flag when runni
 
 Use the keys or a gamepad to manually control the car. Once you become confident in controlling the car, collect the data for training the DNN model. 
 
-The data collection can be enabled and stopped by pressing `r` key or red 'B' button on gamepad. Once recording is enabled, the video feed and the corresponding control inputs are stored in `out-video.avi` and `out-key.csv` files, respectively. Later, we will use these files for training. 
+The data collection can be enabled and stopped by pressing `r` key or red 'B' button on gamepad. Once recording is enabled, the video feed and the corresponding control inputs are stored in `out-video.avi` and `out-key.csv` files, respectively. Later, we will use these files for training. The car stops recording automatically when 900 frames are recorded.
 
 If recording more than one time, rename recorded avi and csv files to out-video-XX.avi and out-key-XX.csv where XX with appropriate numbers.
 
-Compress all the recorded files into a single zip file, say Dataset.zip, and copy the file to the host PC. 
+Compress all the recorded files into a single zip file, say Dataset.zip. 
 
-    $ zip Dataset.zip out-*
-    updating: out-key.csv (deflated 81%)
-    updating: out-video.avi (deflated 3%)
+    $ zip Dataset.zip dataset/out-*
+
+ Copy the file to the host PC (run this on the host PC):
+ 
+    $ scp deepracer@<your_cars_ip_addr>:/home/deepracer/DeepPicar-DeepRacer/Dataset.zip .
 
 
 ## Train the model
     
-Open the colab notebook. Following the notebook, you will upload the dataset to the colab, train the model, and download the model back to your PC. 
+Open the colab notebook. Following the notebook, you will upload the dataset to the colab, train the model, and download the model to your PC. 
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ahmedius2/DeepPicar-DeepRacer/blob/main/RunAll.ipynb)
 
-After you are done training, you need to copy the trained tflite model file (`large-200x66x3.tflite` by default) to the DeepRacer as follows: 
-
-    run on terminal on your local machine
+After you are done training, you need to copy the trained tflite model file (`large-200x66x3.tflite` by default) to the DeepRacer as follows (run this on the host PC): 
     
-    scp ~/Downloads/large-200x66x3.tflite deepracer@<your_car_ip>:/home/deepracer/DeepPicar-v3-awsdeepracer/models
+    $ scp ~/Downloads/large-200x66x3.tflite deepracer@<your_cars_ip_addr>:/home/deepracer/DeepPicar-DeepRacer/models
 
 ## Autonomous control
 
