@@ -16,7 +16,8 @@ class input_stream:
     def __init__(self, speed=50):
         self.buffer = ' '
         self.direction = 0.
-        self.speed = speed
+        self.speed = 0
+        self.def_speed = speed
 
     def read_inp():
         return self.buffer, self.direction
@@ -78,6 +79,13 @@ class input_kbd(input_stream):
             self.direction = 1.0
         elif self.buffer == 'k': # center
             self.direction = .0
+        
+        if self.buffer == 's':
+            self.speed = 0
+        elif self.buffer == 'a':
+            self.speed = self.def_speed
+        elif self.buffer == 'z':
+            self.speed = -self.def_speed
 
         return self.buffer, self.direction, self.speed
 
