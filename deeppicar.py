@@ -16,8 +16,7 @@ from PIL import Image, ImageDraw
 # import deeppicar's sensor/actuator modules
 ##########################################################
 camera   = __import__(params.camera)
-actuator = __import__(params.actuator)
-#inputdev = __import__(params.inputdev)
+actuator_servo = __import__(params.actuator)
 
 ##########################################################
 # global variable initialization
@@ -191,7 +190,7 @@ else:
 
 
 # initlaize deeppicar modules
-actuator.init(args.throttle)
+actuator = actuator_servo.DeepracerServo(args.throttle)
 camera.init(res=cfg_cam_res, fps=cfg_cam_fps, threading=use_thread)
 atexit.register(turn_off)
 
@@ -221,16 +220,17 @@ while True:
         command, direction, speed = cur_inp_stream.read_inp()
 
     if command == 'a':
-        actuator.ffw(args.throttle)
+        speed = args.throttle
         start_ts = ts
         print ("accel")
     elif command == 's':
-        actuator.stop()
+        speed = 0
         print ("stop")
         print ("duration: %.2f" % (ts - start_ts))
         enable_record = False # stop recording as well 
         args.dnn = False # manual mode
     elif command == 'z':
+        speed = -args.throttle
         print ("reverse")
     elif command == 'r':
         enable_record = not enable_record
