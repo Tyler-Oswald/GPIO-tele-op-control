@@ -93,7 +93,7 @@ class input_kbd(input_stream):
 class input_gamepad(input_stream):
     def __init__(self, speed=50):
         self.discrete_max = speed
-        self.shared_arr = Array('d', [0.]*9) # joystick pos and other buttons and finish state
+        self.shared_arr = Array('d', [0.] * 11) # joystick pos and other buttons and finish state
         #self.finish = Value('i', 1)
         self.lock=Lock()
         self.gamepad_process = Process(target=self.inputs_process, \
@@ -156,6 +156,10 @@ class input_gamepad(input_stream):
                     shr_gamepad_state[0]=0.
                     disable_joystick=True
                     gamepad_disable_time = time.time()
+                elif event.ev_type == 'Key' and event.code == 'BTN_TL' and int(event.state) == 1:
+                    shr_gamepad_state[9]=1.
+                elif event.ev_type == 'Key' and event.code == 'BTN_TR' and int(event.state) == 1:
+                    shr_gamepad_state[10]=1.
             #if shr_gamepad_state[0] < 32768//2 and shr_gamepad_state[0] > -32768//2:
                 #shr_gamepad_state[0] = 0. # dead area
             lock.release()
@@ -195,6 +199,12 @@ class input_gamepad(input_stream):
         elif self.shared_arr[7] == 1.:
             self.shared_arr[7] = 0.
             self.buffer='t'
+        elif self.shared_arr[9] == 1.:
+            self.shared_arr[9] = 0.
+            self.buffer='y'
+        elif self.shared_arr[10] == 1.:
+            self.shared_arr[10] = 0.
+            self.buffer='h'
             #print ("toggle video mode")
 
         self.direction = self.shared_arr[0]

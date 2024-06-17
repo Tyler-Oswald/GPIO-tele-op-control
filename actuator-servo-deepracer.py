@@ -274,6 +274,12 @@ class DeepracerServo():
 
         self.save_calib_file()
 
+    def shift_lims_left(self):
+        self.thr_lims = [l  - 8000 for l in self.thr_lims]
+
+    def shift_lims_right(self):
+        self.thr_lims = [l  + 8000 for l in self.thr_lims]
+
 if __name__ == "__main__":
     drs = DeepracerServo(0, True)
 

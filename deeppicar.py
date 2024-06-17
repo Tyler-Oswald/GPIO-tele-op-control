@@ -241,6 +241,10 @@ while True:
     elif command == 'd':
         print ("toggle DNN mode")
         args.dnn = not args.dnn
+    elif command == 'y':
+        actuator.shift_lims_left()
+    elif command == 'h':
+        actuator.shift_lims_right()
     elif command == 'q':
         actuator.stop()
         break
