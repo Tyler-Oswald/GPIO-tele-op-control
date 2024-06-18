@@ -4,7 +4,7 @@ DEEPRACER_DIR=/home/deepracer/DeepPicar-DeepRacer
 dr_run_kb()
 {
 	pushd $DEEPRACER_DIR
-	if [ $# -eq 1 ] && [ $1 != "" ]; then
+	if [ $# -eq 1 ]; then
 		THR="-t $1"
 	else
 		THR=""
@@ -17,7 +17,7 @@ dr_run_kb()
 dr_run_gp()
 {
 	pushd $DEEPRACER_DIR
-	if [ $# -eq 1 ] && [ $1 != "" ]; then
+	if [ $# -eq 1 ]; then
 		THR="-t $1"
 	else
 		THR=""

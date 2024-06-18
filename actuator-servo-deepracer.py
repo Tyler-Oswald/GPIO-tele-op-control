@@ -2,6 +2,7 @@ import os
 import json
 import sys
 import params
+import atexit
 
 def write_to_file(path, val):
     with open(path, 'w') as f:
@@ -62,6 +63,10 @@ class DeepracerServo():
                         str(self.thr_lims[1]))
             except OSError as e:
                 print(f"Failed to configure {pwm}")
+        atexit.register(self.cleanup)
+
+    def cleanup(self):
+        self.save_calib_file()
 
     def read_calib_file(self):
         try:
