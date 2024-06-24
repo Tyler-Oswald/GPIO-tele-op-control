@@ -220,18 +220,14 @@ while True:
         command, direction, speed = cur_inp_stream.read_inp()
 
     if command == 'a':
-        speed = args.throttle
         start_ts = ts
-        print ("accel")
+        print (f"accel, speed: {speed}%")
     elif command == 's':
-        speed = 0
-        print ("stop")
-        print ("duration: %.2f" % (ts - start_ts))
+        print ("stop, time since started moving: %.2f" % (ts - start_ts))
         enable_record = False # stop recording as well 
         args.dnn = False # manual mode
     elif command == 'z':
-        speed = -args.throttle
-        print ("reverse")
+        print (f"reverse, speed: {speed}%")
     elif command == 'r':
         enable_record = not enable_record
         print ("record mode: ", enable_record)
