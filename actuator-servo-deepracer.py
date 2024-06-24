@@ -59,8 +59,7 @@ class DeepracerServo():
                 write_to_file(DeepracerServo.PWM_DIR + pwm + "/enable", "0")
                 write_to_file(DeepracerServo.PWM_DIR + pwm + "/polarity", "normal")
                 write_to_file(DeepracerServo.PWM_DIR + pwm + "/enable", "1")
-                write_to_file(DeepracerServo.PWM_DIR + pwm + "/duty_cycle", \
-                        str(self.thr_lims[1]))
+                self.stop()
             except OSError as e:
                 print(f"Failed to configure {pwm}")
         atexit.register(self.cleanup)
