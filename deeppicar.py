@@ -2,9 +2,9 @@
 import input_stream
 from pi_gpio_controller import PiServoController
 
-STEERING_LEFT = 900
+STEERING_LEFT = 1060
 STEERING_CENTER = 1450
-STEERING_RIGHT = 2000
+STEERING_RIGHT = 1670
 
 # Throttle range (for ESC)
 THROTTLE_MIN = 1060     # reverse
