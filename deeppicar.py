@@ -46,7 +46,7 @@ try:
         if speed > USER_SPEED_LIMIT:
             speed = USER_SPEED_LIMIT
         if speed < 0 and speed > -56:
-            speed = -30
+            speed = -56
         #elif speed < -USER_SPEED_LIMIT - 50:
             #speed = -USER_SPEED_LIMIT - 50
 
