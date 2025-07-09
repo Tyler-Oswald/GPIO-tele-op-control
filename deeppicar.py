@@ -2,6 +2,8 @@
 import input_stream
 from pi_gpio_controller import PiServoController
 
+MAX_SPEED = 60
+
 STEERING_LEFT = 1060
 STEERING_CENTER = 1450
 STEERING_RIGHT = 1670
@@ -25,6 +27,9 @@ actuator = PiServoController()
 try:
     while True:
         command, direction, speed = inp.read_inp()
+
+        speed = max(-MAX_SPEED, min(MAX_SPEED, speed))
+
         print(f"Steering: {direction:.2f}  Speed: {speed:.1f}")
 
         # Steering
