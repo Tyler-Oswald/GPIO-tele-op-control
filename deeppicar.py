@@ -5,6 +5,8 @@ from pi_gpio_controller import PiServoController
 
 
 # Servo PWM values
+USER_SPEED_LIMIT = 40 
+
 STEERING_LEFT = 1060
 STEERING_CENTER = 1450
 STEERING_RIGHT = 1670
@@ -13,7 +15,7 @@ STEERING_RIGHT = 1670
 # ESC PWM values
 THROTTLE_MIN = 1060     # reverse
 THROTTLE_STOP = 1500   # neutral
-THROTTLE_MAX = 1580   # forward Normal 1860
+THROTTLE_MAX = 1700   # forward Normal 1860
 
 def scale(val, in_min, in_max, out_min, out_max):
     return int((val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min)
@@ -26,6 +28,7 @@ actuator = PiServoController()
 try:
     while True:
         command, direction, speed = inp.read_inp()
+        speed = max(-USER_SPEED_LIMIT, min(USER_SPEED_LIMIT, speed))
 
         # Cap speed
         print(f"Steering: {direction:.2f}  Speed: {speed:.1f}")
