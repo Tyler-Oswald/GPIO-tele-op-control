@@ -42,7 +42,7 @@ angle = 0.0
 
 try:
     while True:
-        command, direction, speed = inp.read_inp()
+        command, direction, speed = cur_inp_stream.read_inp()
         print(f"Angle: {direction}  Speed: {speed}")
 
         # Steering: direction [-1.0, +1.0]
