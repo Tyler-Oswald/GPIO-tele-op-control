@@ -2,7 +2,6 @@
 import input_stream
 from pi_gpio_controller import PiServoController
 
-MAX_SPEED = 150
 
 
 # Servo PWM values
@@ -13,7 +12,7 @@ STEERING_RIGHT = 1670
 # ESC PWM values
 THROTTLE_MIN = 1060     # reverse
 THROTTLE_STOP = 1500    # neutral
-THROTTLE_MAX = 1600     # forward Normal 1860
+THROTTLE_MAX = 1700    # forward Normal 1860
 
 def scale(val, in_min, in_max, out_min, out_max):
     return int((val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min)
@@ -28,7 +27,6 @@ try:
         command, direction, speed = inp.read_inp()
 
         # Cap speed
-        speed = max(-MAX_SPEED, min(MAX_SPEED, speed))
         print(f"Steering: {direction:.2f}  Speed: {speed:.1f}")
 
         # Steering PWM
@@ -37,9 +35,9 @@ try:
 
         # Throttle PWM
         if speed > 0:
-            throttle_pwm = scale(speed, 0, MAX_SPEED, THROTTLE_STOP, THROTTLE_MAX)
+            throttle_pwm = scale(speed, 0, THROTTLE_MAX, THROTTLE_STOP, THROTTLE_MAX)
         elif speed < 0:
-            throttle_pwm = scale(speed, -MAX_SPEED, 0, THROTTLE_MIN, THROTTLE_STOP)
+            throttle_pwm = scale(speed, -100, 0, THROTTLE_MIN, THROTTLE_STOP)
         else:
             throttle_pwm = THROTTLE_STOP
 
