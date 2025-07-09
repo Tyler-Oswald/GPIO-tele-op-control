@@ -35,7 +35,7 @@ try:
 
         # Throttle PWM
         if speed > 0:
-            throttle_pwm = scale(speed, 0, THROTTLE_MAX, THROTTLE_STOP, THROTTLE_MAX)
+            throttle_pwm = scale(speed, 0, 100, THROTTLE_STOP, THROTTLE_MAX)
         elif speed < 0:
             throttle_pwm = scale(speed, -100, 0, THROTTLE_MIN, THROTTLE_STOP)
         else:
