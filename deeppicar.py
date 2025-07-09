@@ -9,8 +9,8 @@ from pi_gpio_controller import PiServoController
 
 # Constants — adjust these to match your setup
 STEERING_LEFT = 900
-STEERING_CENTER = 1390
-STEERING_RIGHT = 1800
+STEERING_CENTER = 1450
+STEERING_RIGHT = 2000
 
 THROTTLE_MIN = 1360
 THROTTLE_MAX = 1536
