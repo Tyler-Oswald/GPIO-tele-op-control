@@ -7,7 +7,7 @@ from pi_gpio_controller import PiServoController
 # Servo PWM values
 STEERING_LEFT = 1060
 STEERING_CENTER = 1450
-STEERING_RIGHT = 1670
+STEERING_RIGHT = 1400
 
 # ESC PWM values
 THROTTLE_MIN = 1060     # reverse
