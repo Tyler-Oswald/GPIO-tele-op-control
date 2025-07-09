@@ -61,7 +61,7 @@ try:
         else:
             throttle_pwm = THROTTLE_STOP
 
-        actuator.set_throttle_us(throttle_pwm)
+        #actuator.set_throttle_us(throttle_pwm)
 
         if command == 'q':
             print("Exiting via 'q'")
