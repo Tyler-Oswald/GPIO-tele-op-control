@@ -35,7 +35,7 @@ actuator = PiServoController()
 
 try:
     while True:
-        command, speed, direction = inp.read_inp()
+        command, direction,speed = inp.read_inp()
         speed = deadzone(speed, 15)
         if speed > 15 and speed < 11:
             speed = 11
