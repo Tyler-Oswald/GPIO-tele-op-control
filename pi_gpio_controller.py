@@ -14,8 +14,8 @@ class PiServoController:
             raise Exception("Could not connect to pigpiod. Start it with 'sudo pigpiod'.")
 
         # Throttle range (for ESC)
-        self.THROTTLE_MIN = 1060     # reverse
-        self.THROTTLE_STOP = 1500    # neutral
+        self.THROTTLE_MIN = 1300   # reverse
+        self.THROTTLE_STOP = 1450    # neutral
         self.THROTTLE_MAX = 1700    # forward 
 
 
@@ -36,7 +36,7 @@ class PiServoController:
         self.pi.set_servo_pulsewidth(STEERING_PIN, pwm)
 
     def stop(self):
-        self.set_throttle_us(self.THROTTLE_MIN)  # send neutral throttle pulse continuously
+        self.set_throttle_us(self.THROTTLE_STOP)  # send neutral throttle pulse continuously
         self.set_steering_us(self.STEERING_CENTER)
 
     def cleanup(self):
