@@ -9,6 +9,8 @@ def deadzone(val, deadzone=0.1):
         return (val - deadzone) / (1 - deadzone)
     else:
         return (val + deadzone) / (1 - deadzone)
+    
+
 
 
 
@@ -36,6 +38,8 @@ actuator = PiServoController()
 try:
     while True:
         command, speed, direction = inp.read_inp()
+        speed = scale(speed, -1, 1, THROTTLE_STOP, THROTTLE_MAX)
+        direction = scale(direction, -100, 100, THROTTLE_MIN, THROTTLE_STOP)
         speed = deadzone(speed, 15)
         if speed > 15 and speed < 11:
             speed = 11
@@ -43,7 +47,7 @@ try:
             speed = -USER_SPEED_LIMIT - 25
 
         # Cap speed
-        print(f"Steering: {direction:.2f}  Speed: {speed:.1f}")
+        print(f"Steering: {direction:.1f}  Speed: {speed:.2f}")
 
         # Steering PWM
         direction = deadzone(direction, .15)
