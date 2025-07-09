@@ -19,7 +19,7 @@ def throttle_deadzone(val, deadzone=10):
 
 
 # Servo PWM values
-USER_SPEED_LIMIT = 25
+USER_SPEED_LIMIT = 40
 
 STEERING_LEFT = 1060
 STEERING_CENTER = 1600
