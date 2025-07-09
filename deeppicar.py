@@ -66,6 +66,7 @@ try:
             throttle_pwm = THROTTLE_STOP
 
         print(f"Steering: {steering_pwm:.1f}  Speed: {throttle_pwm:.2f}")
+        
         actuator.set_throttle_us(throttle_pwm)
 
         if command == 'q':
