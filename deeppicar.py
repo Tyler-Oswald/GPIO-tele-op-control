@@ -47,11 +47,10 @@ try:
             speed = USER_SPEED_LIMIT
         if speed < 0 and speed > -56:
             speed = -56
-        #elif speed < -USER_SPEED_LIMIT - 50:
-            #speed = -USER_SPEED_LIMIT - 50
 
-        # Cap speed
-        print(f"Steering: {direction:.1f}  Speed: {speed:.2f}")
+
+
+        
 
         # Steering PWM
         direction = deadzone(direction, .15)
@@ -66,6 +65,7 @@ try:
         else:
             throttle_pwm = THROTTLE_STOP
 
+        print(f"Steering: {steering_pwm:.1f}  Speed: {throttle_pwm:.2f}")
         actuator.set_throttle_us(throttle_pwm)
 
         if command == 'q':
