@@ -28,12 +28,12 @@ actuator = PiServoController()
 try:
     while True:
         command, direction, speed = inp.read_inp()
-        if speed > 0 and speed > 2 and speed < 15:
-            speed = 15
-        if speed > USER_SPEED_LIMIT:
+        if speed > 2 and speed < 11:
+            speed = 11
+        elif speed > USER_SPEED_LIMIT:
             speed = USER_SPEED_LIMIT
-        elif speed < 0 and speed > 15 and speed < 3:
-            speed = 25
+        elif speed < -15 and speed > -30:
+            speed = -25
         elif speed < -USER_SPEED_LIMIT - 25:
             speed = -USER_SPEED_LIMIT - 25
 
