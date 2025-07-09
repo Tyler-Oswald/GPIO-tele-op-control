@@ -27,8 +27,9 @@ STEERING_RIGHT = 1900
 
 
 # ESC PWM values
-THROTTLE_MIN = 1300     # reverse
+THROTTLE_NEG_MIN = 1300     # reverse
 THROTTLE_STOP = 1500   # neutral
+THROTTLE_POS_MIN = 1570
 THROTTLE_MAX = 1700   # forward Normal 1860
 
 def scale(val, in_min, in_max, out_min, out_max):
@@ -66,7 +67,7 @@ try:
             throttle_pwm = THROTTLE_STOP
 
         print(f"Steering: {steering_pwm:.1f}  Speed: {throttle_pwm:.2f}")
-        
+
         actuator.set_throttle_us(throttle_pwm)
 
         if command == 'q':
