@@ -39,6 +39,7 @@ angle = 0.0
 try:
     while True:
         command, direction, speed = inp.read_inp()
+        print(f"Angle: {direction}  Speed: {speed}")
 
         # Steering: direction [-1.0, +1.0]
         steering_pwm = scale(direction, -1.0, 1.0, STEERING_LEFT, STEERING_RIGHT)
