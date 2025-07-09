@@ -9,6 +9,14 @@ def deadzone(val, deadzone=0.1):
         return (val - deadzone) / (1 - deadzone)
     else:
         return (val + deadzone) / (1 - deadzone)
+    
+def throttle_deadzone(val, deadzone=10):
+    if abs(val) < deadzone:
+        return 0.0
+    if val > 0:
+        return (val - deadzone)
+    else:
+        return (val + deadzone)
 
 
 
