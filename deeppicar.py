@@ -30,10 +30,10 @@ args = parser.parse_args()
 
 print(f"Throttle = {args.throttle}%")
 
-if args.gamepad:
-    cur_inp_type= input_stream.input_type.GAMEPAD
-else:
-    cur_inp_type= input_stream.input_type.KEYBOARD
+#if args.gamepad:
+cur_inp_type= input_stream.input_type.GAMEPAD
+#else:
+    #cur_inp_type= input_stream.input_type.KEYBOARD
 
 cur_inp_stream= input_stream.instantiate_inp_stream(cur_inp_type, args.throttle)
 
