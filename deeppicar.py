@@ -2,7 +2,7 @@
 import input_stream
 from pi_gpio_controller import PiServoController
 
-MAX_SPEED = 60
+MAX_SPEED = 30
 
 STEERING_LEFT = 1060
 STEERING_CENTER = 1450
