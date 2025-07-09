@@ -1,6 +1,7 @@
 import pigpio
 import atexit
 
+
 # GPIO pins
 THROTTLE_PIN = 18  # ESC
 STEERING_PIN = 19  # Servo
