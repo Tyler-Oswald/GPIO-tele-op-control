@@ -5,7 +5,7 @@ from pi_gpio_controller import PiServoController
 
 
 # Servo PWM values
-USER_SPEED_LIMIT = 40 
+USER_SPEED_LIMIT = 15
 
 STEERING_LEFT = 1060
 STEERING_CENTER = 1450
@@ -28,7 +28,8 @@ actuator = PiServoController()
 try:
     while True:
         command, direction, speed = inp.read_inp()
-        speed = 20
+        if speed > USER_SPEED_LIMIT:
+            speed = USER_SPEED_LIMIT
 
         # Cap speed
         print(f"Steering: {direction:.2f}  Speed: {speed:.1f}")
