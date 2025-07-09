@@ -5,72 +5,60 @@ import params
 import argparse
 import input_stream
 
-##########################################################
-# import deeppicar's sensor/actuator modules
-##########################################################
-actuator_servo = __import__(params.actuator)
-angle = 0.0
+
+# Constants — adjust these to match your setup
+STEERING_LEFT = 1230
+STEERING_CENTER = 1390
+STEERING_RIGHT = 1670
+
+THROTTLE_MIN = 1360
+THROTTLE_MAX = 1536
+THROTTLE_STOP = 1468  # Neutral (idle)
+
+# Convert input [-1.0, 1.0] to PWM µs range
+def scale(val, in_min, in_max, out_min, out_max):
+    return int((val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min)
 
 ##########################################################
-# local functions
+# Program begins
 ##########################################################
-def deg2rad(deg):
-    return deg * math.pi / 180.0
-def rad2deg(rad):
-    return 180.0 * rad / math.pi
-
-##########################################################
-# program begins
-##########################################################
-
-parser = argparse.ArgumentParser(description='DeepPicar main')
-parser.add_argument("-t", "--throttle", help="throttle percent. [0-100]%", type=int, default=50)
-parser.add_argument("-n", "--ncpu", help="number of cores to use.", type=int, default=2)
-parser.add_argument("-f", "--hz", help="control frequnecy", type=int)
+parser = argparse.ArgumentParser(description='Simple GPIO control')
+parser.add_argument("-t", "--throttle", help="default throttle percent [0-100]", type=int, default=50)
 parser.add_argument("-g", "--gamepad", help="Use gamepad", action="store_true")
 args = parser.parse_args()
 
-if args.throttle:
-    print ("throttle = %d pct" % (args.throttle))
+print(f"Throttle = {args.throttle}%")
 
+input_type = input_stream.input_type.GAMEPAD if args.gamepad else input_stream.input_type.KEYBOARD
+inp = input_stream.instantiate_inp_stream(input_type, args.throttle)
 
-if args.gamepad:
-    cur_inp_type= input_stream.input_type.GAMEPAD
-else:
-    cur_inp_type= input_stream.input_type.KEYBOARD
+actuator = __import__(params.actuator)
+angle = 0.0
 
-cur_inp_stream= input_stream.instantiate_inp_stream(cur_inp_type, args.throttle)
+try:
+    while True:
+        command, direction, speed = inp.read_inp()
 
+        # Steering: direction [-1.0, +1.0]
+        steering_pwm = scale(direction, -1.0, 1.0, STEERING_LEFT, STEERING_RIGHT)
+        actuator.set_steering_us(steering_pwm)
 
+        # Throttle: speed [-100, +100]
+        if speed == 0:
+            throttle_pwm = THROTTLE_STOP
+        elif speed > 0:
+            throttle_pwm = scale(speed, 0, 100, THROTTLE_STOP, THROTTLE_MAX)
+        else:
+            throttle_pwm = scale(speed, -100, 0, THROTTLE_MIN, THROTTLE_STOP)
 
+        actuator.set_throttle_us(throttle_pwm)
 
-# initlaize deeppicar modules
-actuator = actuator_servo.PiServoController(args.throttle)
+        if command == 'q':
+            print("Stopping...")
+            actuator.stop()
+            break
 
-# enter main loop
-while True:
+except KeyboardInterrupt:
+    actuator.stop()
 
-    command, direction, speed = cur_inp_stream.read_inp()
-
-    if command == 'a':
-        start_ts = ts
-        print (f"accel, speed: {speed}%")
-    elif command == 's':
-        print ("stop, time since started moving: %.2f" % (ts - start_ts))
-        enable_record = False # stop recording as well 
-        args.dnn = False # manual mode
-    elif command == 'z':
-        print (f"reverse, speed: {speed}%")
-    elif command == 'y':
-        actuator.shift_lims_left()
-    elif command == 'h':
-        actuator.shift_lims_right()
-    elif command == 'q':
-        actuator.stop()
-        break
-
-    actuator.set_steering(direction * 30)
-    angle = deg2rad(direction * 30)
-    actuator.set_throttle(speed)
-
-print ("Finish..")
+print("Done.")
