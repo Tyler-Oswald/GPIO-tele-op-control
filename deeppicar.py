@@ -45,8 +45,8 @@ try:
     while True:
         command, direction,speed = inp.read_inp()
         speed = throttle_deadzone(speed, 15)
-        if speed > 15 and speed < 11:
-            speed = 11
+        if speed > USER_SPEED_LIMIT:
+            speed = USER_SPEED_LIMIT
         elif speed < -USER_SPEED_LIMIT - 25:
             speed = -USER_SPEED_LIMIT - 25
 
