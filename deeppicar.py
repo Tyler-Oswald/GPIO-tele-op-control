@@ -30,7 +30,7 @@ STEERING_RIGHT = 1900
 THROTTLE_NEG_MIN = 1300     # reverse
 THROTTLE_NEG_MAX = 1396
 THROTTLE_STOP = 1500   # neutral
-THROTTLE_POS_MIN = 1570
+THROTTLE_POS_MIN = 1540
 THROTTLE_MAX = 1700   # forward Normal 1860
 
 def scale(val, in_min, in_max, out_min, out_max):
