@@ -7,12 +7,13 @@ from pi_gpio_controller import PiServoController
 # Servo PWM values
 STEERING_LEFT = 1060
 STEERING_CENTER = 1450
-STEERING_RIGHT = 1400
+STEERING_RIGHT = 1670
+
 
 # ESC PWM values
 THROTTLE_MIN = 1060     # reverse
-THROTTLE_STOP = 1500    # neutral
-THROTTLE_MAX = 1700    # forward Normal 1860
+THROTTLE_STOP = 1060   # neutral
+THROTTLE_MAX = 1400    # forward Normal 1860
 
 def scale(val, in_min, in_max, out_min, out_max):
     return int((val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min)
