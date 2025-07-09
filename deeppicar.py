@@ -32,8 +32,8 @@ try:
             speed = 11
         elif speed > USER_SPEED_LIMIT:
             speed = USER_SPEED_LIMIT
-        elif speed < -15 and speed > -30:
-            speed = -25
+        elif speed < 0 and speed > -30:
+            speed = -30
         elif speed < -USER_SPEED_LIMIT - 25:
             speed = -USER_SPEED_LIMIT - 25
 
