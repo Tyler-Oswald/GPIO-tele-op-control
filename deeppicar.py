@@ -45,7 +45,7 @@ cur_inp_stream= input_stream.instantiate_inp_stream(cur_inp_type, args.throttle)
 
 
 # initlaize deeppicar modules
-actuator = actuator_servo.DeepracerServo(args.throttle)
+actuator = actuator_servo.PiServoController(args.throttle)
 
 # enter main loop
 while True:
