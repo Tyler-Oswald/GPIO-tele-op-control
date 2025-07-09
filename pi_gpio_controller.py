@@ -34,8 +34,8 @@ class PiServoController:
         self.pi.set_servo_pulsewidth(STEERING_PIN, pwm)
 
     def stop(self):
-        self.pi.set_servo_pulsewidth(THROTTLE_PIN, 0)
-        self.pi.set_servo_pulsewidth(STEERING_PIN, 0)
+        self.set_throttle_us(self.THROTTLE_STOP)  # send neutral throttle pulse continuously
+        self.set_steering_us(self.STEERING_CENTER)
 
     def cleanup(self):
         self.stop()
