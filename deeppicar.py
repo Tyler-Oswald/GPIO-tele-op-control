@@ -2,6 +2,15 @@
 import input_stream
 from pi_gpio_controller import PiServoController
 
+def deadzone(val, deadzone=0.1):
+    if abs(val) < deadzone:
+        return 0.0
+    # Optionally rescale output to compensate for dead zone
+    if val > 0:
+        return (val - deadzone) / (1 - deadzone)
+    else:
+        return (val + deadzone) / (1 - deadzone)
+
 
 
 # Servo PWM values
@@ -28,12 +37,9 @@ actuator = PiServoController()
 try:
     while True:
         command, direction, speed = inp.read_inp()
+        speed = deadzone(speed, 15)
         if speed > 15 and speed < 11:
             speed = 11
-        elif speed > USER_SPEED_LIMIT:
-            speed = USER_SPEED_LIMIT
-        elif speed < -15 and speed > -30:
-            speed = -30
         elif speed < -USER_SPEED_LIMIT - 25:
             speed = -USER_SPEED_LIMIT - 25
 
@@ -41,6 +47,7 @@ try:
         print(f"Steering: {direction:.2f}  Speed: {speed:.1f}")
 
         # Steering PWM
+        direction = deadzone(direction, .15)
         steering_pwm = scale(direction, -1.0, 1.0, STEERING_LEFT, STEERING_RIGHT)
         actuator.set_steering_us(steering_pwm)
 
