@@ -13,7 +13,7 @@ STEERING_RIGHT = 1670
 # ESC PWM values
 THROTTLE_MIN = 1060     # reverse
 THROTTLE_STOP = 1060   # neutral
-THROTTLE_MAX = 1500    # forward Normal 1860
+THROTTLE_MAX = 1600    # forward Normal 1860
 
 def scale(val, in_min, in_max, out_min, out_max):
     return int((val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min)
