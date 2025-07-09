@@ -6,9 +6,9 @@ STEERING_LEFT = 900
 STEERING_CENTER = 1450
 STEERING_RIGHT = 2000
 
-THROTTLE_MIN = 1360
-THROTTLE_MAX = 1536
-THROTTLE_STOP = 1468
+THROTTLE_MIN = 1060     # reverse
+THROTTLE_STOP = 1500    # neutral
+THROTTLE_MAX = 1860     # forward
 
 def scale(val, in_min, in_max, out_min, out_max):
     return int((val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min)
@@ -18,6 +18,8 @@ input_type = input_stream.input_type.GAMEPAD
 inp = input_stream.instantiate_inp_stream(input_type, 0)  # default throttle no longer used
 
 actuator = PiServoController()
+actuator.arm()
+
 
 try:
     while True:

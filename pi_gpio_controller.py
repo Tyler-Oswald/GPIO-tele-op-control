@@ -14,9 +14,9 @@ class PiServoController:
             raise Exception("Could not connect to pigpiod. Start it with 'sudo pigpiod'.")
 
         # Throttle range (for ESC)
-        self.THROTTLE_MIN = 1000
-        self.THROTTLE_STOP = 1500
-        self.THROTTLE_MAX = 2000
+        self.THROTTLE_MIN = 1060     # reverse
+        self.THROTTLE_STOP = 1500    # neutral
+        self.THROTTLE_MAX = 1860     # forward
 
         # Steering range
         self.STEERING_LEFT = 1230
