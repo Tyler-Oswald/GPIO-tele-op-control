@@ -13,7 +13,7 @@ STEERING_RIGHT = 1670
 
 
 # ESC PWM values
-THROTTLE_MIN = 1060     # reverse
+THROTTLE_MIN = 1300     # reverse
 THROTTLE_STOP = 1500   # neutral
 THROTTLE_MAX = 1700   # forward Normal 1860
 
