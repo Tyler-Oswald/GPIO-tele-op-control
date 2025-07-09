@@ -148,6 +148,7 @@ class input_gamepad(input_stream):
                     shr_gamepad_state[5]=1.
                 elif event.ev_type == 'Key' and event.code == 'BTN_SELECT':
                     shr_gamepad_state[6]=1.
+                    shr_gamepad_state[8]=0. 
                     #finish.value=1
                 elif event.ev_type == 'Key' and event.code == 'BTN_WEST' and int(event.state) == 1:
                     shr_gamepad_state[7]=1.

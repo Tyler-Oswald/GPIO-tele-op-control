@@ -26,7 +26,7 @@ class PiServoController:
         atexit.register(self.cleanup)
 
     def set_throttle_us(self, pwm_us):
-        pwm = max(500, min(2500, pwm_us))
+        pwm = max(500, min(1860, pwm_us))
         self.pi.set_servo_pulsewidth(THROTTLE_PIN, pwm)
 
     def set_steering_us(self, pwm_us):
