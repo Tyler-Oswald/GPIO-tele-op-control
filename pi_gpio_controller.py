@@ -1,7 +1,6 @@
 # pi_gpio_controller.py
 import pigpio
 import atexit
-import time
 
 # GPIO pins
 THROTTLE_PIN = 18  # ESC
@@ -11,9 +10,9 @@ class PiServoController:
     def __init__(self):
         self.pi = pigpio.pi()
         if not self.pi.connected:
-            raise Exception("Could not connect to pigpiod. Start it with 'sudo pigpiod'.")
+            raise Exception("Start pigpiod with: sudo pigpiod ")
 
-        # Throttle range (for ESC)
+        # Throttle range for ESC
         self.THROTTLE_MIN = 1000   # reverse
         self.THROTTLE_STOP = 1500    # neutral
         self.THROTTLE_MAX = 19000   # forward 
@@ -25,7 +24,7 @@ class PiServoController:
         self.STEERING_CENTER = 1390
         self.STEERING_RIGHT = 1670
 
-        atexit.register(self.cleanup)
+        atexit.register(self.stop)
 
     def set_throttle_us(self, pwm_us):
         pwm = max(self.THROTTLE_MIN, min(self.THROTTLE_MAX, pwm_us))
@@ -36,15 +35,9 @@ class PiServoController:
         self.pi.set_servo_pulsewidth(STEERING_PIN, pwm)
 
     def stop(self):
-        self.set_throttle_us(self.THROTTLE_STOP)  # send neutral throttle pulse continuously
+        self.set_throttle_us(self.THROTTLE_STOP) 
         self.set_steering_us(self.STEERING_CENTER)
 
-    def cleanup(self):
-        self.stop()
-        self.pi.stop()
 
-    def arm(self):
-        # Send neutral signal to arm ESC
-        self.set_throttle_us(self.THROTTLE_STOP)
-        time.sleep(2)
+
 

@@ -13,10 +13,8 @@ def deadzone(val, deadzone=0.1):
 def throttle_deadzone(val, deadzone=10):
     if abs(val) < deadzone:
         return 0.0
-    if val > 0:
-        return (val - deadzone)
-    else:
-        return (val + deadzone)
+    return val
+
 
 
 
@@ -47,6 +45,8 @@ try:
         speed = throttle_deadzone(speed, 15)
         if speed > USER_SPEED_LIMIT:
             speed = USER_SPEED_LIMIT
+        if speed < 0 and speed < -30:
+            speed = -30
         elif speed < -USER_SPEED_LIMIT - 50:
             speed = -USER_SPEED_LIMIT - 50
 
@@ -69,13 +69,12 @@ try:
         actuator.set_throttle_us(throttle_pwm)
 
         if command == 'q':
-            print("Exiting via 'q'")
             break
 
 except KeyboardInterrupt:
-    print("Interrupted with Ctrl+C")
+    print("Exiting...")
 
 finally:
-    print("Stopping ESC and servo...")
+    print("Stopping ESC")
     actuator.stop()
 
