@@ -15,7 +15,7 @@ class PiServoController:
 
         # Throttle range (for ESC)
         self.THROTTLE_MIN = 1300   # reverse
-        self.THROTTLE_STOP = 1450    # neutral
+        self.THROTTLE_STOP = 1500    # neutral
         self.THROTTLE_MAX = 1700    # forward 
 
 

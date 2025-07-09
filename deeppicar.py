@@ -8,7 +8,7 @@ from pi_gpio_controller import PiServoController
 USER_SPEED_LIMIT = 15
 
 STEERING_LEFT = 1060
-STEERING_CENTER = 1450
+STEERING_CENTER = 1500
 STEERING_RIGHT = 1670
 
 
