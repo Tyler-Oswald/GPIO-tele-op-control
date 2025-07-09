@@ -55,7 +55,7 @@ try:
 
         # Steering PWM
         direction = deadzone(direction, .15)
-        steering_pwm = scale(direction, -1.0, 1.0, STEERING_LEFT, STEERING_RIGHT)
+        steering_pwm = scale(direction, 1.0, -1.0, STEERING_LEFT, STEERING_RIGHT)
         actuator.set_steering_us(steering_pwm)
 
         # Throttle PWM
