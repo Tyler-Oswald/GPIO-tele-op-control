@@ -5,7 +5,6 @@ from pi_gpio_controller import PiServoController
 def deadzone(val, deadzone=0.1):
     if abs(val) < deadzone:
         return 0.0
-    # Optionally rescale output to compensate for dead zone
     if val > 0:
         return (val - deadzone) / (1 - deadzone)
     else:
@@ -36,7 +35,7 @@ actuator = PiServoController()
 
 try:
     while True:
-        command, direction, speed = inp.read_inp()
+        command, speed, direction = inp.read_inp()
         speed = deadzone(speed, 15)
         if speed > 15 and speed < 11:
             speed = 11
