@@ -45,10 +45,10 @@ try:
         speed = throttle_deadzone(speed, 15)
         if speed > USER_SPEED_LIMIT:
             speed = USER_SPEED_LIMIT
-        if speed < 0 and speed > -30:
+        if speed < 0 and speed > -56:
             speed = -30
-        elif speed < -USER_SPEED_LIMIT - 50:
-            speed = -USER_SPEED_LIMIT - 50
+        #elif speed < -USER_SPEED_LIMIT - 50:
+            #speed = -USER_SPEED_LIMIT - 50
 
         # Cap speed
         print(f"Steering: {direction:.1f}  Speed: {speed:.2f}")
