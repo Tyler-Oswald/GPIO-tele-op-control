@@ -28,7 +28,7 @@ actuator = PiServoController()
 try:
     while True:
         command, direction, speed = inp.read_inp()
-        speed = max(-USER_SPEED_LIMIT, min(USER_SPEED_LIMIT, speed))
+        speed = 20
 
         # Cap speed
         print(f"Steering: {direction:.2f}  Speed: {speed:.1f}")
