@@ -119,11 +119,11 @@ class input_gamepad(input_stream):
                 disable_joystick = False
             lock.acquire()
             for event in gamepad_events:
-                if not disable_joystick and event.ev_type == 'Absolute' and event.code == 'ABS_X':
+                if not disable_joystick and event.ev_type == 'Absolute' and event.code == 'ABS_Y':
                     val = int(event.state)
                     if val <= -256 or val >= 256: # calib, dead area
                         shr_gamepad_state[0] = val / 32768 #/ -32768 to 32767
-                if not disable_joystick and event.ev_type == 'Absolute' and event.code == 'ABS_RY':
+                if not disable_joystick and event.ev_type == 'Absolute' and event.code == 'ABS_RX':
                     val = int(event.state)
                     #if val <= -256 or val >= 256: # calib, dead areadd
                     shr_gamepad_state[8] = -val / 32768 *100

@@ -9,8 +9,6 @@ def deadzone(val, deadzone=0.1):
         return (val - deadzone) / (1 - deadzone)
     else:
         return (val + deadzone) / (1 - deadzone)
-    
-
 
 
 
@@ -38,8 +36,7 @@ actuator = PiServoController()
 try:
     while True:
         command, speed, direction = inp.read_inp()
-        speed = deadzone(speed, .15)
-        speed = scale(speed, -1, 1, THROTTLE_STOP, THROTTLE_MAX)
+        speed = deadzone(speed, 15)
         if speed > 15 and speed < 11:
             speed = 11
         elif speed < -USER_SPEED_LIMIT - 25:
@@ -49,9 +46,9 @@ try:
         print(f"Steering: {direction:.1f}  Speed: {speed:.2f}")
 
         # Steering PWM
-        direction = deadzone(direction, 15)
-        steering_pwm = scale(direction, -100, 100, STEERING_LEFT, STEERING_RIGHT)
-        #actuator.set_steering_us(steering_pwm)
+        direction = deadzone(direction, .15)
+        steering_pwm = scale(direction, -1.0, 1.0, STEERING_LEFT, STEERING_RIGHT)
+        actuator.set_steering_us(steering_pwm)
 
         # Throttle PWM
         if speed > 0:
@@ -61,7 +58,7 @@ try:
         else:
             throttle_pwm = THROTTLE_STOP
 
-        #actuator.set_throttle_us(throttle_pwm)
+        actuator.set_throttle_us(throttle_pwm)
 
         if command == 'q':
             print("Exiting via 'q'")
