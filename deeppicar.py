@@ -44,7 +44,7 @@ actuator = PiServoController()
 try:
     while True:
         command, direction,speed = inp.read_inp()
-        speed = deadzone(speed, 15)
+        speed = throttle_deadzone(speed, 15)
         if speed > 15 and speed < 11:
             speed = 11
         elif speed < -USER_SPEED_LIMIT - 25:
