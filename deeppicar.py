@@ -30,6 +30,8 @@ try:
         command, direction, speed = inp.read_inp()
         if speed > USER_SPEED_LIMIT:
             speed = USER_SPEED_LIMIT
+        if speed < -USER_SPEED_LIMIT:
+            speed = -USER_SPEED_LIMIT
 
         # Cap speed
         print(f"Steering: {direction:.2f}  Speed: {speed:.1f}")
