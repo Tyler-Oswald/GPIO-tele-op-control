@@ -6,6 +6,7 @@ STEERING_LEFT = 900
 STEERING_CENTER = 1450
 STEERING_RIGHT = 2000
 
+# Throttle range (for ESC)
 THROTTLE_MIN = 1060     # reverse
 THROTTLE_STOP = 1500    # neutral
 THROTTLE_MAX = 1860     # forward
@@ -18,7 +19,7 @@ input_type = input_stream.input_type.GAMEPAD
 inp = input_stream.instantiate_inp_stream(input_type, 0)  # default throttle no longer used
 
 actuator = PiServoController()
-actuator.arm()
+#actuator.arm()
 
 
 try:
